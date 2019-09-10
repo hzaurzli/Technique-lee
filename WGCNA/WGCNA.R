@@ -73,7 +73,7 @@ table(net$colors)
 #Convert labels to colors for plotting                                      
 mergedColors = labels2colors(net$colors)
 table(mergedColors)
-                                      
+      
                                       
 ## Plot the dendrogram and the module colors underneath  
 #assign all of the gene to their corresponding module 
@@ -82,7 +82,23 @@ plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]],
                     "Module colors",
                     dendroLabels = FALSE, hang = 0.03,
                     addGuide = TRUE, guideHang = 0.05)
+      
+                                      
+##相关性
+MEs = net$MEs
+MEs_col = MEs
+colnames(MEs_col) = paste0("ME", labels2colors(
+  as.numeric(str_replace_all(colnames(MEs),"ME",""))))
+MEs_col = orderMEs(MEs_col)
 
+# 根据基因间表达量进行聚类所得到的各模块间的相关性图
+# marDendro/marHeatmap 设置下、左、上、右的边距
+plotEigengeneNetworks(MEs_col, "Eigengene adjacency heatmap", 
+                      marDendro = c(3,3,2,4),
+                      marHeatmap = c(3,4,2,2), plotDendrograms = T, 
+                      xLabelsAngle = 90)                                     
+
+                                      
 
 #Clear sample size and number of genes                                      
 nGenes = ncol(datExpr)
