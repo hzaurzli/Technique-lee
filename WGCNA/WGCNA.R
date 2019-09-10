@@ -294,13 +294,23 @@ filter <- modTOM[top, top]
 ##导出模块基因
 TOM = TOMsimilarityFromExpr(datExpr, power = sft$powerEstimate); 
 # Select module
-module = "turquoise";
+module = "turquoise"
 # Select module probes
 probes = colnames(datExpr) ## 我们例子里面的probe就是基因名
-inModule = (moduleColors==module);
-modProbes = probes[inModule]; 
+inModule = (moduleColors==module)##导出基因名
+inModule = datExpr1[,moduleColors==module] ##导出相应模块的基因表达矩阵                                     
+modProbes = probes[inModule] 
 ## 也是提取指定模块的基因名
 # Select the corresponding Topological Overlap
 modTOM = TOM[inModule, inModule];
 dimnames(modTOM) = list(modProbes, modProbes)
 
+##画出各组基因表达与特征值的趋势
+par(mfrow=c(2,1), mar=c(0,4.1,4,2.05))
+plotMat(t(scale(datExpr1[,moduleColors==module]) ),
+        nrgcols=30,rlabels=F,rcols=module,
+        main=module, cex.main=2)
+par(mar=c(2,2.3,0.5,0.8))
+barplot(as.matrix(t(MEs$MEbrown)), col=module, main="", cex.main=2,
+        ylab="eigengene expression",xlab="array sample")
+                                      ####t(MEs$MEbrown)导出brown模块的各组特征值，做转置
