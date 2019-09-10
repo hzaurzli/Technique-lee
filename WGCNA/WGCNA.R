@@ -288,5 +288,17 @@ IMConn = softConnectivity(datExpr[, modProbes])
 top = (rank(-IMConn) <= nTop)
 filter <- modTOM[top, top]
 
-
+                                      
+##导出模块基因
+TOM = TOMsimilarityFromExpr(datExpr, power = sft$powerEstimate); 
+# Select module
+module = "turquoise";
+# Select module probes
+probes = colnames(datExpr) ## 我们例子里面的probe就是基因名
+inModule = (moduleColors==module);
+modProbes = probes[inModule]; 
+## 也是提取指定模块的基因名
+# Select the corresponding Topological Overlap
+modTOM = TOM[inModule, inModule];
+dimnames(modTOM) = list(modProbes, modProbes)
 
