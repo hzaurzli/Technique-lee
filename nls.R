@@ -41,7 +41,7 @@ ggplot(data,aes(ee, uu))+
   geom_point(size=3)+geom_line(aes(ee,fitted(f)),col='red')+
   xlab("Data/G")+
   ylab("Gene number")+
-  geom_text(aes(label = uu, vjust = 1.1 , hjust = -0.5, angle = -45),size = 3.5, show_guide = FALSE)
+  geom_text(aes(label = uu, vjust = 1.1 , hjust = -0.5, angle = -45),size = 3.5, show.legend = FALSE)
 
 
 fp <- nls(ii ~ -a/(ee+c) + b,start=list(a = 400, b = -49, c = 0.025), data=data, trace=T)
@@ -51,5 +51,5 @@ ggplot(data,aes(ee, ii))+
   geom_point(size=3)+geom_line(aes(ee,fitted(fp)),col='red')+
   xlab("Data/G")+
   ylab("Gene number percent")+
-  geom_text(aes(label = uu, vjust = 1.1 , hjust = -0.5,angle = -45),size = 3.5, show_guide = FALSE)+
+  geom_text(aes(label = uu, vjust = 1.1 , hjust = -0.5,angle = -45),size = 3.5, show.legend = FALSE)+
   scale_y_continuous(labels = percent)
