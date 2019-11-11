@@ -7,6 +7,8 @@ do
 done
 wait
 
+
+##The file select
 samtools view -s 0.02 -bo /home/rzli/swxxxjz/bam/tot/13.gtf/0.02_13/0.02_13.bam /home/rzli/swxxxjz/bam/tot/13.gtf/1.0_13.bam
 samtools view -s 0.04 -bo /home/rzli/swxxxjz/bam/tot/13.gtf/0.04_13/0.04_13.bam /home/rzli/swxxxjz/bam/tot/13.gtf/1.0_13.bam
 samtools view -s 0.06 -bo /home/rzli/swxxxjz/bam/tot/13.gtf/0.06_13/0.06_13.bam /home/rzli/swxxxjz/bam/tot/13.gtf/1.0_13.bam
