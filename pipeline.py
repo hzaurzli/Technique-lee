@@ -14,7 +14,7 @@ class quality_control():
     def run(self, cmd=None, wkdir=None):
         sys.stderr.write("Running %s ...\n" % cmd)
         p = Popen(cmd, shell=True, cwd=wkdir)
-        p.wait()
+        p.wait()  #wait all processes over
         return p
 
     def test(self, inputfile=None, outputDir=None):
