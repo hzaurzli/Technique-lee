@@ -1,4 +1,6 @@
-##µ¼ÈëÊı¾İ##
+#Copyright: from website
+
+##å¯¼å…¥æ•°æ®##
 library(WGCNA)
 options(stringsAsFactors = FALSE)
 enableWGCNAThreads()
@@ -7,7 +9,7 @@ samples=read.csv('Sam_info.txt',sep = '\t',row.names = 1)
 expro=read.csv('ExpData.txt',sep = '\t',row.names = 1)
 dim(expro)
 
-##É¸Ñ¡·½²îÇ°25%µÄ»ùÒò##
+##ç­›é€‰æ–¹å·®å‰25%çš„åŸºå› ##
 m.vars=apply(expro,1,var)
 expro.upper=expro[which(m.vars>quantile(m.vars, probs = seq(0, 1, 0.25))[4]),]
 dim(expro.upper)
@@ -15,7 +17,7 @@ datExpr=as.data.frame(t(expro.upper));
 nGenes = ncol(datExpr)
 nSamples = nrow(datExpr)
 
-##Ñù±¾¾ÛÀà¼ì²éÀëÈºÖµ##
+##æ ·æœ¬èšç±»æ£€æŸ¥ç¦»ç¾¤å€¼##
 gsg = goodSamplesGenes(datExpr, verbose = 3);
 gsg$allOK
 sampleTree = hclust(dist(datExpr), method = "average")
@@ -23,9 +25,9 @@ plot(sampleTree, main = "Sample clustering to detect outliers"
      , sub="", xlab="")
 save(datExpr, file = "FPKM-01-dataInput.RData")
 
-##Ã»ÓĞÀëÈºÖµ£¬²»×÷´¦Àí##
+##æ²¡æœ‰ç¦»ç¾¤å€¼ï¼Œä¸ä½œå¤„ç†##
 
-##ÈíãĞÖµÉ¸Ñ¡##
+##è½¯é˜ˆå€¼ç­›é€‰##
 powers = c(c(1:10), seq(from = 12, to=20, by=2))
 sft = pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
 par(mfrow = c(1,2));
@@ -41,7 +43,7 @@ plot(sft$fitIndices[,1], sft$fitIndices[,5],
      main = paste("Mean connectivity"))
 text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 
-##Ò»²½·¨ÍøÂç¹¹½¨£ºOne-step network construction and module detection##
+##ä¸€æ­¥æ³•ç½‘ç»œæ„å»ºï¼šOne-step network construction and module detection##
 net = blockwiseModules(datExpr, power = 14, maxBlockSize = 6000,
                        TOMType = "unsigned", minModuleSize = 30,
                        reassignThreshold = 0, mergeCutHeight = 0.25,
@@ -51,7 +53,7 @@ net = blockwiseModules(datExpr, power = 14, maxBlockSize = 6000,
                        verbose = 3)
 table(net$colors)
 
-##»æ»­½á¹ûÕ¹Ê¾##
+##ç»˜ç”»ç»“æœå±•ç¤º##
 # open a graphics window
 #sizeGrWindow(12, 9)
 # Convert labels to colors for plotting
@@ -62,7 +64,7 @@ plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]],
                     dendroLabels = FALSE, hang = 0.03,
                     addGuide = TRUE, guideHang = 0.05)
 
-##½á¹û±£´æ
+##ç»“æœä¿å­˜
 moduleLabels = net$colors
 moduleColors = labels2colors(net$colors)
 table(moduleColors)
@@ -72,7 +74,7 @@ save(MEs, moduleLabels, moduleColors, geneTree,
      file = "AS-green-FPKM-02-networkConstruction-auto.RData")
 
 
-##±íĞÍÓëÄ£¿éÏà¹ØĞÔ##
+##è¡¨å‹ä¸æ¨¡å—ç›¸å…³æ€§##
 trainDt= allTraits[Rat, -1]
 rownames(trainDt) = samples[traitRows, 1]
 table(rownames(trainDt) == rownames(datExpr))
@@ -95,14 +97,14 @@ labeledHeatmap(Matrix = modTraitCor, xLabels = colnames(samples), yLabels = name
                textMatrix = textMatrix, setStdMargins = FALSE, cex.text = 0.5, zlim = c(-1,1)
                , main = paste("Module-trait relationships"))
 
-###µ¼³öÍøÂçµ½Cytoscape###
+###å¯¼å‡ºç½‘ç»œåˆ°Cytoscape###
 # Recalculate topological overlap if needed
 TOM = TOMsimilarityFromExpr(datExpr, power = 14);
 # Read in the annotation file
 # annot = read.csv(file = "GeneAnnotation.csv");
-# Select modulesĞèÒªĞŞ¸Ä£¬Ñ¡ÔñĞèÒªµ¼³öµÄÄ£¿éÑÕÉ«
+# Select moduleséœ€è¦ä¿®æ”¹ï¼Œé€‰æ‹©éœ€è¦å¯¼å‡ºçš„æ¨¡å—é¢œè‰²
 modules = c("lightgreen");
-# Select module probesÑ¡ÔñÄ£¿éÌ½²â
+# Select module probesé€‰æ‹©æ¨¡å—æ¢æµ‹
 probes = names(datExpr)
 inModule = is.finite(match(moduleColors, modules));
 modProbes = probes[inModule];
@@ -121,7 +123,7 @@ cyt = exportNetworkToCytoscape(modTOM,
                                nodeAttr = moduleColors[inModule]);
 
 
-## ¿ÉÊÓ»¯»ùÒòÍøÂç
+## å¯è§†åŒ–åŸºå› ç½‘ç»œ
 # Calculate topological overlap anew: this could be done more efficiently by saving the TOM
 # calculated during module detection, but let us do it again here.
 dissTOM = 1-TOMsimilarityFromExpr(datExpr, power = 14);
@@ -132,7 +134,7 @@ diag(plotTOM) = NA;
 # Call the plot function
 #sizeGrWindow(9,9)
 TOMplot(plotTOM, geneTree, moduleColors, main = "Network heatmap plot, all genes")
-#Ëæ±ãÑ¡È¡1000¸ö»ùÒòÀ´¿ÉÊÓ»¯
+#éšä¾¿é€‰å–1000ä¸ªåŸºå› æ¥å¯è§†åŒ–
 nSelect = 1000
 # For reproducibility, we set the random seed
 set.seed(10);
@@ -149,7 +151,7 @@ plotDiss = selectTOM^7;
 diag(plotDiss) = NA;
 TOMplot(plotDiss, selectTree, selectColors, main = "Network heatmap plot, selected genes")
 
-#´Ë´¦»­µÄÊÇ¸ù¾İ»ùÒò¼ä±í´ïÁ¿½øĞĞ¾ÛÀàËùµÃµ½µÄ¸÷Ä£¿é¼äµÄÏà¹ØĞÔÍ¼
+#æ­¤å¤„ç”»çš„æ˜¯æ ¹æ®åŸºå› é—´è¡¨è¾¾é‡è¿›è¡Œèšç±»æ‰€å¾—åˆ°çš„å„æ¨¡å—é—´çš„ç›¸å…³æ€§å›¾
 MEs = moduleEigengenes(datExpr, moduleColors)$eigengenes
 MET = orderMEs(MEs)
 sizeGrWindow(7, 6) 
