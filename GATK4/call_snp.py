@@ -29,7 +29,7 @@ class callVars():
         return cmd
 
     def bwa_alignment(self, ref=None, test_1_fq=None, test_2_fq=None, sam=None):
-        cmd = "%s mem -t 4 -R %s %s %s > %s" % (self.bwa, ref, test_1_fq, test_2_fq,sam)
+        cmd = "%s mem -t 4 %s %s %s > %s" % (self.bwa, ref, test_1_fq, test_2_fq,sam)
         return cmd
 
     def samtobam(self, sam=None, bam=None):
