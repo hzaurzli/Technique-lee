@@ -1,5 +1,3 @@
-https://www.jianshu.com/p/25905a905086
-
 ##Download the software
 source("https://bioconductor.org/biocLite.R")
 biocLite(c("AnnotationDbi", "impute","GO.db", "preprocessCore"))
