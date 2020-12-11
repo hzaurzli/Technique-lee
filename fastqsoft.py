@@ -84,3 +84,77 @@ def translate_dna(sequence):
     sequencestart = sequence[int(start):]
     stop = sequencestart.find('TAA')
     cds = str(sequencestart[:int(stop)+3])
+
+#############################################################
+#############################################################
+#############################################################
+
+import argparse
+import os.path
+
+
+def read_file(x):
+    with open(x) as fa:
+        sequences = {}
+        for line in fa:
+            if line.startswith(">"):
+                name = line.rstrip("\n")
+                sequences[name] = ""
+            else:
+                sequences[name] = sequences[name] + line.rstrip("\n")
+    return sequences
+
+
+def ntCounts_stat(fasta):
+    for name in fasta.keys():
+        ntCounts = []
+        seq = fasta[name]
+        for nt in ['A', 'C', 'G', 'T']:
+            ntCounts.append(seq.count(nt))
+    return ntCounts
+
+def gcCount_stat(fasta):
+    for name in fasta.keys():
+        ntCounts = []
+        seq = fasta[name]
+    total = len(seq)
+    gcCount = seq.count('G') + seq.count('C')
+    gcContent = format(float(gcCount / total * 100), '.6f')
+    return gcCount
+
+def rna_seq(fasta):
+    for name in fasta.keys():
+        ntCounts = []
+        seq = fasta[name]
+    total = len(seq)
+    gcCount = seq.count('G') + seq.count('C')
+    rnaSeq = seq.replace('T', 'U')
+    return rnaSeq
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-fa', action='store_true', dest='fasta', default=False, help='Check out the sequance')
+    parser.add_argument('-nt', action='store_true', dest='ntCounts', default=False, help='Calculate Nucleotide count')
+    parser.add_argument('-gc', action='store_true', dest='gcContent', default=False, help='Calculate gc content ')
+    parser.add_argument('-r', action='store_true', dest='rnaSeq', default=False,
+                        help='Calculate Transcription sequence')
+
+    parser.add_argument('-i', dest='filename', type=str, help='Input file')  # 读取文件
+    args = parser.parse_args()
+
+    x = args.filename
+    fasta = read_file(x)
+    if args.ntCounts and not args.gcContent and not args.rnaSeq and not args.fasta:
+        print('Nucleotide count(A,C,G,T): ',ntCounts_stat(fasta))
+    if not args.ntCounts and args.gcContent and not args.rnaSeq and not args.fasta:
+        print('gc content: ',gcCount_stat(fasta))
+    if not args.ntCounts and not args.gcContent and args.rnaSeq and not args.fasta:
+        print('Transcription sequence: ',rna_seq(fasta))
+
+    if not args.ntCounts and not args.gcContent and not args.rnaSeq and args.fasta:
+        print('Sequence: ', fasta)
+
+
+
+
+
