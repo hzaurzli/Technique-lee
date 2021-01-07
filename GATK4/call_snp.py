@@ -88,7 +88,7 @@ class annotation():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="SNP")
-    parser.add_argument("-ref", "--ref", required=True, type=str, help="the referance")
+    parser.add_argument("-ref", "--ref", required=True, type=str, help="the reference")
     parser.add_argument("-f1", "--f1", required=True, type=str, help="the fastq1")
     parser.add_argument("-f2", "--f2", required=True, type=str, help="the fastq2")
     parser.add_argument("-gtf", "--gtf", required=True, type=str, help="the gtf file")
